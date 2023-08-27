@@ -30,6 +30,9 @@ const homeAEl = document.querySelector('#home-a');
 const highScoreAEl = document.querySelector('#highscore-a');
 const formEl = document.querySelector('#form')
 //quiz variable sets
+let currentQuestion = 0;
+//ea click on next btn --> cQ++
+
 const quizA = [
   {question: "What is a?",
   choices: ["true", "nul", ""],
@@ -41,6 +44,8 @@ const quizA = [
 }
 ];
 
+let initialsList = {};
+let highScoreList = {};
 //create a global variable to allow for clearIntervals to be accessed anywhere
 let timeInterval;
 //max time allowed for the quiz
@@ -100,17 +105,25 @@ var timer = () => {
 
 timeInterval = setInterval(function (){
     timeLeft--;
-    timerEl.textContent = timeLeft;
+    timerEl.textContent = ' ' + timeLeft;
 
     if (timeLeft <= 0) {
       timerEl.textContent = 'Time up!';
       clearInterval(timeInterval);
       gameOver();
     } else if (timeLeft > 0 && currentQuestion == quizA.length) {
-      localStorage.setItem('score', JSON.stringify(timeLeft));
+      let timeScore = timeLeft;
+      highScoreList = parseInt(localStorage.getItem('highScore'));
+      if (highScoreList == '') {
+        highScoreList = highScoreList.push(timeScore);
+        localStorage.setItem('highScore', JSON.stringify(highScoreList));
+      } else {
+        localStorage.setItem ('highscore', JSON.stringify(timeScore));
+      }
+
       clearInterval(timeInterval);
     }
-return;
+return; 
   }, 1000);
 };
 
@@ -120,6 +133,7 @@ return;
 //main -> label -> input x4 choices (answer choices) -> button to move to next question
 var startQuiz = () => {
   mainEl.textContent = '';
+  currentQuestion = 0;
   timer();
 inQuiz();
 };
@@ -131,8 +145,7 @@ var inQuiz = () => {
 }
 
 
-let currentQuestion = 0;
-//ea click on next btn --> cQ++
+
 
 //create question to be answered as a label.
 var questionLabel = () => {
@@ -206,7 +219,7 @@ var gameOver = () => {
 
   showP('Hit the reset button to try again or take a look at High Scores.');
 
-  resetBtn('Reset QUiz');
+  resetBtn('Reset Quiz');
 
 };
 
@@ -263,23 +276,30 @@ const endQuiz = () => {
 }
 
 
-const initialsInput = document.querySelector('#initials');
 
 var saveHighScore = () => {
-
-  var saveName = initialsInput.value.trim();
-  if (saveName !== '') {
+  const initialsInput = document.querySelector('#initials');
+  let saveName = initialsInput.value.trim();
+  initialsListList = parseInt(localStorage.getItem('name'))
+  if (saveName !== '' && initialsList !== '') {
+    initialsList = initialsList.push(saveName);
+    localStorage.setItem('name', JSON.stringify(initialsList));
+    backHomeAfterSave();
+  } else if (saveName !== '') {
     localStorage.setItem('name', JSON.stringify(saveName));
-  } ;
-  
-  backHomeAfterSave();
+    backHomeAfterSave();
+  } else {
+    alert('Please enter your initials');
+
+    endQuiz();
+  };
 };
 
 var highScoreBtn = () => {
   var hsBtn = document.createElement('button');
   hsBtn.textContent = 'High Scores';
   mainEl.appendChild(hsBtn);
-  hsBtn.addEventListener('click', )
+  // hsBtn.addEventListener('click', )
 }
 
 var backHomeAfterSave = () => {
@@ -289,19 +309,13 @@ var backHomeAfterSave = () => {
 
   showP('Click the HighScore button or the High Scores link to view past attempts');
   showP('Click the Home button to go back to the start and take another quiz');
-  
+  highScoreBtn();
   resetBtn('Home');
 }
 
-const highScoreList = [];
 
 
-// const showScore = () => {
-//   const showScore = document.createElement('h2');
-//   const getScore = JSON.parse()
-//   showScore.textContent = `Your score is ${timeLeft}`;
-//   mainEl.appendChild(showScore);
-// }
+// highScoreAEl.addEventListener('click', );
 
 
 
