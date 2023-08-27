@@ -107,25 +107,22 @@ var timer = () => {
 timeInterval = setInterval(function (){
     timeLeft--;
     timerEl.textContent = ' ' + timeLeft;
+    let timeScore = timeLeft;
 
     if (timeLeft <= 0) {
       timerEl.textContent = 'Time up!';
       clearInterval(timeInterval);
       gameOver();
     } else if (timeLeft > 0 && currentQuestion == quizA.length) {
-      let timeScore = timeLeft;
-      let storedScores = JSON.parse(localStorage.getItem('highScore'));
-      if (storedScores == null) {
-        storedScores = highScoreList;
-        highScoreList = storedScores.push(timeScore);
-        localStorage.setItem('highScore', JSON.stringify(highScoreList));
+      let storedScores = JSON.parse(localStorage.getItem('highScore') || '[]');
+        storedScores.push(timeScore);
+        localStorage.setItem('highScore', JSON.stringify(storedScores));
         clearInterval(timeInterval);
-      } else {
-        highScoreList = storedScores.push(timeScore);
-        localStorage.setItem('highScore', JSON.stringify(highScoreList));
-        clearInterval(timeInterval);
-      }
-
+        if (storedScores == null) {
+          storedScores = initialsList;
+          storedScores.push(timeScore);
+          localStorage.setItem('highScore', JSON.stringify(storedScores));
+        }
       }
 return; 
   }, 1000);
@@ -284,16 +281,16 @@ const endQuiz = () => {
 var saveHighScore = () => {
   const initialsInput = document.querySelector('#initials');
   let saveName = initialsInput.value.trim();
-  var storedNames = JSON.parse(localStorage.getItem('name'));
+  let storedNames = JSON.parse(localStorage.getItem('name') || '[]');
   
-  if (saveName !== '' && initialsList !== null) {
-    initialsList = storedNames.push(saveName);
-    localStorage.setItem('name', JSON.stringify(initialsList));
+  if (saveName !== '' && storedNames !== null) {
+    storedNames.push(saveName);
+    localStorage.setItem('name', JSON.stringify(storedNames));
     backHomeAfterSave();
-  } else if (saveName !== '') {
+  } else if (saveName !== '' && storedNames == null) {
     storedNames = initialsList;
-    initialsList = storedNames.push(saveName);
-    localStorage.setItem('name', JSON.stringify(initialsList));
+    storedNames.push(saveName);
+    localStorage.setItem('name', JSON.stringify(storedNames));
     backHomeAfterSave();
   } else {
     alert('Please enter your initials');
@@ -306,7 +303,7 @@ var highScoreBtn = () => {
   var hsBtn = document.createElement('button');
   hsBtn.textContent = 'High Scores';
   mainEl.appendChild(hsBtn);
-  // hsBtn.addEventListener('click', )
+  hsBtn.addEventListener('click', showHighScore)
 }
 
 var backHomeAfterSave = () => {
@@ -321,9 +318,30 @@ var backHomeAfterSave = () => {
 }
 
 
+var showHighScore = () => {
+  mainEl.innerHTML = '';
 
-// highScoreAEl.addEventListener('click', );
+  showTitle('Last Quiz Scores')
+  let ul = document.createElement('ul');
+  ul.setAttribute('id', 'score-list');
+  mainEl.appendChild(ul);
+  retrieveSaved();
+  resetBtn('Home');
 
+}
+
+var retrieveSaved = () => {
+  let getNames = JSON.parse(localStorage.getItem('name'));
+  let getScores = JSON.parse(localStorage.getItem('highScore'));
+
+
+  for (let i = 0; i < getNames.length; i++) {
+    var li = document.createElement('li');
+    li.textContent = getNames[i] + ' - ' + getScores[i];
+    let addUl = document.querySelector('#score-list');
+    addUl.appendChild(li);
+  }
+}
 
 
 
