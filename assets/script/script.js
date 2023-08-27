@@ -44,8 +44,8 @@ const quizA = [
 }
 ];
 
-let initialsList = {};
-let highScoreList = {};
+let initialsList = [];
+let highScoreList = [];
 //create a global variable to allow for clearIntervals to be accessed anywhere
 let timeInterval;
 //max time allowed for the quiz
@@ -101,6 +101,7 @@ const homepage = () => {
 };
 
 //function for timer; MISSING: deduct time if you get question wrong.
+//highScoreList var = []
 var timer = () => {
 
 timeInterval = setInterval(function (){
@@ -113,16 +114,19 @@ timeInterval = setInterval(function (){
       gameOver();
     } else if (timeLeft > 0 && currentQuestion == quizA.length) {
       let timeScore = timeLeft;
-      highScoreList = parseInt(localStorage.getItem('highScore'));
-      if (highScoreList == '') {
-        highScoreList = highScoreList.push(timeScore);
+      let storedScores = JSON.parse(localStorage.getItem('highScore'));
+      if (storedScores == null) {
+        storedScores = highScoreList;
+        highScoreList = storedScores.push(timeScore);
         localStorage.setItem('highScore', JSON.stringify(highScoreList));
+        clearInterval(timeInterval);
       } else {
-        localStorage.setItem ('highscore', JSON.stringify(timeScore));
+        highScoreList = storedScores.push(timeScore);
+        localStorage.setItem('highScore', JSON.stringify(highScoreList));
+        clearInterval(timeInterval);
       }
 
-      clearInterval(timeInterval);
-    }
+      }
 return; 
   }, 1000);
 };
@@ -280,13 +284,16 @@ const endQuiz = () => {
 var saveHighScore = () => {
   const initialsInput = document.querySelector('#initials');
   let saveName = initialsInput.value.trim();
-  initialsListList = parseInt(localStorage.getItem('name'))
-  if (saveName !== '' && initialsList !== '') {
-    initialsList = initialsList.push(saveName);
+  var storedNames = JSON.parse(localStorage.getItem('name'));
+  
+  if (saveName !== '' && initialsList !== null) {
+    initialsList = storedNames.push(saveName);
     localStorage.setItem('name', JSON.stringify(initialsList));
     backHomeAfterSave();
   } else if (saveName !== '') {
-    localStorage.setItem('name', JSON.stringify(saveName));
+    storedNames = initialsList;
+    initialsList = storedNames.push(saveName);
+    localStorage.setItem('name', JSON.stringify(initialsList));
     backHomeAfterSave();
   } else {
     alert('Please enter your initials');
