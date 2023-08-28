@@ -3,11 +3,24 @@
   --primary-color: 	#598BAF;
 }
 
+body {
+  height: 100vh;
+
+  background-color: var(--white);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  font-family: monospace;
+  line-height: 1.5;
+}
+
 header {
   display: flex;
   align-items: center;
   background-color: var(--primary-color);
-  padding: 5px;
+  padding: 20px;
   color: white;
 }
 
@@ -23,11 +36,9 @@ nav ul {
   font-size: 1.5rem
 }
 
-nav ul li a {
-  transition: color 0.25s, font-weight 0.25s;
-}
 
-nav ul li a:hover {
+
+a:hover {
 color: yellow;
 font-weight: bold;
 }
@@ -40,6 +51,7 @@ header h2 {
 a {
   text-decoration: none;
   color: white;
+  transition: color 0.25s, font-weight 0.25s;
 }
 
 .header-middle {
@@ -60,28 +72,66 @@ a {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  margin: 20%;
+  margin: 10vh 10vw;
   border: dashed 5px;
   padding: 5px 15px;
 }
-h1 {
+h1,
+label {
   font-size: 2rem;
   line-height: 2.5rem;
+  font-weight: bolder;
+  text-align: center;
 }
 h2 {
   font-size: 1.75rem;
   line-height: 1.5rem;
+  font-weight: bold;
 }
-.home-para {
+.home-para,
+.wrong-p,
+#score-list {
   font-size: 1.25rem;
   line-height: 1.5rem;
   padding: 5px 0;
 }
 
-#home-start-btn {
+#home-start-btn,
+.save-btn,
+.reset,
+.answer-choices,
+.hs-btn,
+button {
   font-size: 1.25rem;
-};
+}
+
+.answer-choices {
+  width: 100%;
+}
+
+button:hover,
+button:focus {
+  background-color: #598BAF;
+  color: white;
+  font-weight: bold;
+  border: outset black 3px;
+}
+
+#initials:focus {
+  background-color: #598BAF;
+  color: yellow;
+  font-weight: bold;
+}
 
 footer {
   background-color: #598BAF;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+footer h3 {
+  font-size: 1.2rem;
 }

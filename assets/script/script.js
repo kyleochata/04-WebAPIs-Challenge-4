@@ -33,13 +33,25 @@ let currentQuestion = 0;
 //ea click on next btn --> cQ++
 
 const quizA = [
-  {question: "What is a?",
-  choices: ["true", "nul", ""],
-  answer: "true",
+  {question: "A 44 year old man from Texas rushes to the ED for blood in his urine. During examination, it is revealed that the man has crescentic glomerulonephritis, mucosal ulcerations throughout the respiratory tract, rashes, and sinusitis. After lab testing, it is determined that the pathogenesis of all of these sxs are due to PR3-ANCA mediation. Which of the following sxs should also be present in this mans case?",
+  choices: ["Asthma", "GI Bleeding", "Hemoptysis", "Palpable purpura", "Muscle pain / weakness"],
+  answer: "Palpable purpura",
 }, {
-  question: "hello",
-  choices: ['b', 'c', 'a'],
-  answer: 'b'
+  question: "A 55 year old man comes to the office for coughing up blood. The man has histo slides prepared of his small vessels and it shows segmental fibrinoid necrosis of the media w/ focal transmural necrotizing lesions. No granulomas or eosinophils are seen. In the postcapillary venules, only infiltrating and fragmenting neutrophils are seen. Which of the following organs would be spared by this disease? ",
+  choices: ['Lungs', 'Muscles', 'GI', 'Kidney', 'Skin', 'None of the above'],
+  answer: 'None of the above',
+}, {
+  question: 'A 50 year old man comes into the office with suspected chronic renal damage. Ultrasound reveals advanced renal disease with shrunken kidneys. The mans presenting sxs are consistent with nephrotic syndrome. Labs show creatinine, complement, BP are wnl. Labs also showed that there is limited proteinuria of < 1 g/day.  PMH reveals that he had a streptococcal infection 1 week ago that resolved itself yesterday. Which of the following would results would be the best reason to perform a renal biopsy?',
+  choices: ['Ultrasound results', 'Nephrotic syndrome symptoms', 'Lab results', 'Proteinuria', 'Post streptococcal infection'],
+  answer: 'Nephrotic syndrome symptoms',
+}, {
+  question: 'A 45 year old woman comes to the office for an update on her medication. She has been recently been on warfarin for a stroke she had 2 months ago. The lady reports that she has noticed that cuts on her hands have been bleeding longer than normal. SH shows that she is a chef and is at risk for cuts and scrapes from working with a knife. The pt asks to be place on a different drug that will allow for no monitoring requirements, but as effective as warfarin. Which of the following would be an adequate replacement for warfarin?',
+  choices: ['Heparin', 'Apixaban', 'Argatroban', 'Fondaparinux', 'LMWH'],
+  answer: 'Apixaban',
+}, {
+  question: 'A pt comes into the ED after a MVA. The emergency medicine attending reads over the note that gives the following: 50 yo f with excessive bleeding from an abdominal wound. Pt is currently on heparin for a DVT diagnosed 2 weeks ago. The attending decides to prescribe a drug to help stop the bleeding of this pt after stitching them up. Which of the following is most likely to be given to this pt?',
+  choices: ['Vitamin K', 'Aminocaproic Acid', 'Urokinase', 'Protamine Sulfate', 'Streptokinase'],
+  answer: 'Protamine Sulfate',
 }
 ];
 
@@ -48,7 +60,7 @@ let highScoreList = [];
 //create a global variable to allow for clearIntervals to be accessed anywhere
 let timeInterval;
 //max time allowed for the quiz
-var timeLeft = 30;
+var timeLeft = 288;
 // highScoreAEl.addEventListener('click', showScores)
 
 //when page loads for first time or when you click the home anchor in the header; run this fxn to display our home screen
@@ -168,7 +180,7 @@ var inQuiz = () => {
 var questionLabel = () => {
   var questionL = document.createElement('label'); //
   questionL.textContent = quizA[currentQuestion].question;
-  questionL.classList.add('home-para');
+  questionL.classList.add('question-label');
   let card = document.querySelector('.card');
   card.appendChild(questionL);
 };
@@ -178,6 +190,7 @@ var answerChoiceBtn = () => {
   for (let i = 0; i < quizA[currentQuestion].choices.length; i++) {
     var answerBtn = document.createElement('button');
     answerBtn.textContent = quizA[currentQuestion].choices[i];
+    answerBtn.setAttribute('class', 'answer-choices');
     let card = document.querySelector('.card');
     card.appendChild(answerBtn);
     answerBtn.addEventListener('click', checkAnswer)
@@ -194,6 +207,7 @@ var wrongMsg = () => {
   //lets user know they picked wrong answer.
   var wrongAnswer = document.createElement('p');
   wrongAnswer.textContent = 'Sorry. That was incorrect. Try Again!';
+  wrongAnswer.setAttribute('class', 'wrong-p');
   let card = document.querySelector('.card');
   card.appendChild(wrongAnswer);
 }
@@ -205,7 +219,7 @@ var checkAnswer = (event) => {
   let answerCheck = event.target.textContent;
   let realAnswer = quizA[currentQuestion].answer;
 if (answerCheck !== realAnswer) {
-  event.target.setAttribute('style', 'text-decoration: line-through');
+  event.target.setAttribute('style', 'text-decoration: line-through; background-color: #FF7276');
   wrongMsg();
   timeLeft -= 10;
 } else {
@@ -248,7 +262,7 @@ var gameOver = () => {
 const resetTimer = () => {
   timerEl.textContent = '';
   clearInterval(timeInterval);
-  timeLeft = 30;
+  timeLeft = 288;
   homepage();
 };
 
@@ -258,6 +272,7 @@ const resetTimer = () => {
 const resetBtn = (btntext) => {
   var resetBtn = document.createElement('button');
   resetBtn.textContent = btntext;
+  resetBtn.setAttribute('class', 'reset');
   let card = document.querySelector('.card');
   card.appendChild(resetBtn);
   resetBtn.addEventListener('click', resetTimer);
@@ -276,6 +291,7 @@ var initialsUserInput= () => {
 var saveInitialsBtn = () => {
   var saveIBtn = document.createElement('button');
   saveIBtn.textContent = 'Save';
+  saveIBtn.setAttribute('class', 'save-btn');
   let card = document.querySelector('.card');
   card.appendChild(saveIBtn);
   saveIBtn.addEventListener('click', saveHighScore);
