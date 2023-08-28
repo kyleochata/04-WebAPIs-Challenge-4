@@ -28,7 +28,6 @@ const timerEl = document.querySelector('#timer');
 const mainEl = document.querySelector('#main');
 const homeAEl = document.querySelector('#home-a');
 const highScoreAEl = document.querySelector('#highscore-a');
-const formEl = document.querySelector('#form')
 //quiz variable sets
 let currentQuestion = 0;
 //ea click on next btn --> cQ++
@@ -54,32 +53,42 @@ var timeLeft = 30;
 
 //when page loads for first time or when you click the home anchor in the header; run this fxn to display our home screen
 
+var createCard = () => {
+  var cardDiv = document.createElement('div');
+  cardDiv.setAttribute('class', 'card')
+  mainEl.appendChild(cardDiv);
+}
+
 const showTitle = (titleContent) => {
   var title = document.createElement('h1');
   title.textContent = titleContent;
   title.classList.add('home-title');
-  mainEl.appendChild(title);
+  let card = document.querySelector('.card');
+  card.appendChild(title);
 };
 
 const showSubTitle = (subTitleContent) => {
   var subTitle = document.createElement('h2');
   subTitle.textContent = subTitleContent;
   subTitle.classList.add('sub-title');
-  mainEl.appendChild(subTitle);
+  let card = document.querySelector('.card');
+  card.appendChild(subTitle);
 };
 
 const showP = (paraContent) => {
   var pContent = document.createElement('p');
   pContent.textContent = paraContent;
   pContent.classList.add('home-para');
-  mainEl.appendChild(pContent);
+  let card = document.querySelector('.card');
+  card.appendChild(pContent);
 };
 
 const startBtn = () => {
   var btnStart = document.createElement('button');
   btnStart.textContent = 'Start Quiz!';
   btnStart.setAttribute('id', 'home-start-btn');
-  mainEl.appendChild(btnStart);
+  let card = document.querySelector('.card');
+  card.appendChild(btnStart);
   btnStart.addEventListener('click', startQuiz);
 
 };
@@ -88,6 +97,9 @@ const homepage = () => {
 
   mainEl.textContent = '';
   
+  createCard();
+
+
   showTitle('Ready to take this challenge!?');
 
   showSubTitle('Read below to start!');
@@ -136,11 +148,14 @@ var startQuiz = () => {
   mainEl.textContent = '';
   currentQuestion = 0;
   timer();
-inQuiz();
+  createCard();
+  inQuiz();
 };
 
 var inQuiz = () => {
   mainEl.innerHTML = '';
+  createCard();
+
   questionLabel();
   answerChoiceBtn();
 }
@@ -149,11 +164,13 @@ var inQuiz = () => {
 
 
 //create question to be answered as a label.
+
 var questionLabel = () => {
   var questionL = document.createElement('label'); //
   questionL.textContent = quizA[currentQuestion].question;
   questionL.classList.add('home-para');
-  mainEl.appendChild(questionL);
+  let card = document.querySelector('.card');
+  card.appendChild(questionL);
 };
 
 //creating buttons for the user to pick. 
@@ -161,7 +178,8 @@ var answerChoiceBtn = () => {
   for (let i = 0; i < quizA[currentQuestion].choices.length; i++) {
     var answerBtn = document.createElement('button');
     answerBtn.textContent = quizA[currentQuestion].choices[i];
-    mainEl.appendChild(answerBtn);
+    let card = document.querySelector('.card');
+    card.appendChild(answerBtn);
     answerBtn.addEventListener('click', checkAnswer)
   };
 };
@@ -176,8 +194,8 @@ var wrongMsg = () => {
   //lets user know they picked wrong answer.
   var wrongAnswer = document.createElement('p');
   wrongAnswer.textContent = 'Sorry. That was incorrect. Try Again!';
-
-  mainEl.appendChild(wrongAnswer);
+  let card = document.querySelector('.card');
+  card.appendChild(wrongAnswer);
 }
 
 const quizEndCheck = (currentQuestion + 1);
@@ -200,8 +218,10 @@ if (answerCheck !== realAnswer) {
 var goNextQ = () => {
   currentQuestion++;
   if (currentQuestion === quizA.length) {
+    createCard();
     endQuiz();
   } else {
+    createCard();
     inQuiz();
 };
 }
@@ -210,7 +230,7 @@ var goNextQ = () => {
 var gameOver = () => {
   mainEl.innerHTML = '';
   
-
+  createCard();
 
   showTitle('GAME OVER');
 
@@ -238,36 +258,33 @@ const resetTimer = () => {
 const resetBtn = (btntext) => {
   var resetBtn = document.createElement('button');
   resetBtn.textContent = btntext;
-  mainEl.appendChild(resetBtn);
+  let card = document.querySelector('.card');
+  card.appendChild(resetBtn);
   resetBtn.addEventListener('click', resetTimer);
 };
-
-// const formMaker = () => {
-//   var form = document.createElement('form');
-//   form.setAttribute('id', 'form');
-//   form.textContent = '';
-//   mainEl.appendChild(form);
-// }
 
 var initialsUserInput= () => {
   var initials = document.createElement('input');
   initials.setAttribute('type', 'text');
   initials.setAttribute('maxlength', 2);
   initials.setAttribute('id', 'initials');
-  mainEl.appendChild(initials);
+  let card = document.querySelector('.card');
+  card.appendChild(initials);
 };
 
 
 var saveInitialsBtn = () => {
   var saveIBtn = document.createElement('button');
   saveIBtn.textContent = 'Save';
-  mainEl.appendChild(saveIBtn);
+  let card = document.querySelector('.card');
+  card.appendChild(saveIBtn);
   saveIBtn.addEventListener('click', saveHighScore);
 };
 
 const endQuiz = () => {
   mainEl.innerHTML = '';
   
+  createCard();
   showTitle('Congratulations! You finished the quiz!');
 
   showP('Please enter your initials and save your score');
@@ -302,13 +319,14 @@ var saveHighScore = () => {
 var highScoreBtn = () => {
   var hsBtn = document.createElement('button');
   hsBtn.textContent = 'High Scores';
-  mainEl.appendChild(hsBtn);
+  let card = document.querySelector('.card');
+  card.appendChild(hsBtn);
   hsBtn.addEventListener('click', showHighScore)
 }
 
 var backHomeAfterSave = () => {
   mainEl.innerHTML = '';
-
+  createCard();
   showTitle('Your score has been saved.');
 
   showP('Click the HighScore button or the High Scores link to view past attempts');
@@ -319,12 +337,14 @@ var backHomeAfterSave = () => {
 
 
 var showHighScore = () => {
+  clearInterval(timeInterval);
   mainEl.innerHTML = '';
-
-  showTitle('Last Quiz Scores')
+  createCard();
+  showTitle('Last Quiz Scores');
+  let card = document.querySelector('.card');
   let ul = document.createElement('ul');
   ul.setAttribute('id', 'score-list');
-  mainEl.appendChild(ul);
+  card.appendChild(ul);
   retrieveSaved();
   resetBtn('Home');
 
@@ -351,7 +371,7 @@ var retrieveSaved = () => {
 
 //if you click the home anchor; will stop the timer, reset it, and take the user back to the homepage
 homeAEl.addEventListener('click', resetTimer);
-
+highScoreAEl.addEventListener('click', showHighScore);
 
 
 

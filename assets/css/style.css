@@ -5,17 +5,36 @@
 
 header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   background-color: var(--primary-color);
-  padding: 5px 15px;
-  color: white
+  padding: 5px;
+  color: white;
 }
 
-header ul {
+
+header > div {
+  width: calc(100% / 3);
+}
+
+nav ul {
+  display: flex;
   display: flex;
   gap: 10px;
+  font-size: 1.5rem
+}
 
+nav ul li a {
+  transition: color 0.25s, font-weight 0.25s;
+}
+
+nav ul li a:hover {
+color: yellow;
+font-weight: bold;
+}
+
+header h2 {
+  font-size: 1.75rem;
+  font-weight: bolder;
 }
 
 a {
@@ -23,10 +42,46 @@ a {
   color: white;
 }
 
-footer {
+.header-middle {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+}
+
+.header-right {
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+.card {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
-  background-color: var(--primary-color);
-  color: white;
+  margin: 20%;
+  border: dashed 5px;
+  padding: 5px 15px;
+}
+h1 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+h2 {
+  font-size: 1.75rem;
+  line-height: 1.5rem;
+}
+.home-para {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  padding: 5px 0;
+}
+
+#home-start-btn {
+  font-size: 1.25rem;
+};
+
+footer {
+  background-color: #598BAF;
 }
