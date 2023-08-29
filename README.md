@@ -41,3 +41,6 @@ Credits are given to the following:
 * UCI full-stack coding bootcamp for the acceptance criteria for the project.
 
 * AskBCS and their array of assistants that helped me out with technical questions when they arose.
+
+* [Meyerweb](https://meyerweb.com/eric/tools/css/reset/) for their open source code for the reset.css.
+
