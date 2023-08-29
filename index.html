@@ -10,31 +10,27 @@
 
 </head>
 <body>
-  <!-- make a header with button on left to change page to show highscore; box on the R of header with the timer-->
+
   <header>  
-  <div>    
+
       <nav class="header-left">
-      <ul>
-        <li><a id="highscore-a" href="#">High Scores</a></li>
-        <li><a id="home-a" href="#">Home</a></li>
-      </ul>
-    </nav>
-    </div>
+        <ul>
+          <li><a id="highscore-a" href="#">High Scores</a></li>
+          <li><a id="home-a" href="#">Home</a></li>
+        </ul>
+      </nav>
 
     <div class="header-middle">
       <h2>Challenge Quiz</h2>
     </div>
 
     <div class="header-right"> 
-      <p>Time: <span id="timer"></span></p>
+      <div class="timer-container">Time: <span id="timer"></span></div>
     </div>
 
   </header>
 
-  <!-- make a div that will hold the quiz question; inputs for answers; buttons to proceed forward and back;
-  When at home screen this div will hav h1 with welcome to the quiz; quiz rules and how score works; start quiz button;
-  put function for loading the home screen with welcome and rules into onLoad"" -->
-  <main id="main" onload="homepage()">
+  <main id="main">
   
 
 
@@ -43,11 +39,10 @@
 <footer class="bottom">
   <div>
     <h3>Made by Kyle Etrata</h3>
-    <p>2023, Enormous_Elephant, Inc</p>
   </div>
-  
+
   <div>
-    <a href="#">View the code to this project here</a>
+    <a href="https://github.com/kyleochata/04-WebAPIs-Challenge-4" target="_blank">View the code to this project here</a>
   </div>
 </footer>
 
