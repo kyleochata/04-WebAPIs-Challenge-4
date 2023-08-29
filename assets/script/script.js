@@ -205,19 +205,27 @@ const answerChoiceBtn = () => {
   };
 };
 
+  //lets user know they picked wrong answer.
+  const sorryP = () => {
+    let wrongAnswer = document.createElement('p');
+    wrongAnswer.textContent = 'Sorry. That was incorrect. Try Again!';
+    wrongAnswer.setAttribute('class', 'wrong-p');
+    let card = document.querySelector('.card');
+    card.appendChild(wrongAnswer);
+  }
+
 // If there was a previous wrong answer and they pick another wrong answer, will remove the last wrongMsg p and insert a new one. 
 const wrongMsg = () => {
-  let removeWrongMsg = document.querySelector('p');
-  if (removeWrongMsg.matches('p')) {
+  let removeWrongMsg = document.querySelector('.wrong-p');
+  if (removeWrongMsg === null) {
+    sorryP();
+  } else if (removeWrongMsg.matches('.wrong-p')) {
     removeWrongMsg.remove();
-  //lets user know they picked wrong answer.
-  let wrongAnswer = document.createElement('p');
-  wrongAnswer.textContent = 'Sorry. That was incorrect. Try Again!';
-  wrongAnswer.setAttribute('class', 'wrong-p');
-  let card = document.querySelector('.card');
-  card.appendChild(wrongAnswer);
+    sorryP();
+  } else {
+    return;
+  }
 
-  };
 }
 
 //increase currentQuestion counter and call inQUiz to display the next question and answer set
