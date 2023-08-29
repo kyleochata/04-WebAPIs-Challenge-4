@@ -1,37 +1,12 @@
-/*
-First load the site; presented with the home page
-- Home page:
-  -Welcomes user to the quiz
-  -Explain quiz rules
-  - Explain how quiz score works
-  -Start button
-    -when start button is hit; timer starts and quiz starts
-  -Header will have an link/button to view previous high scores
-    -save highscores value of score and initials of who the score belongs to
-
--When the quiz is started
-  -Question is shown at the top of the page;
-  -multiple choice answers (only allow one to be picked);
-  -button at end of answer choices
-    -Next question btn: will proceed to the next question (will change to finish/submit button on the last question)
-    -After user hits the next question button:
-    if user gets a question wrong:
-      -time is taken away from the timer
-    -Show a question counter based on (question user is on) out of (total number of questions)
-  -Quiz is over when user gets to the final question and answers
-  -Quiz is over when timer hits 0
-  -On game over: user can input their initials and save their final score;
-    -score and initals must be saved and reloaded after quiz finishes; can be accessed with the view highscore button
-*/
 //variables
 const timerEl = document.querySelector('#timer');
 const mainEl = document.querySelector('#main');
 const homeAEl = document.querySelector('#home-a');
 const highScoreAEl = document.querySelector('#highscore-a');
-//quiz variable sets
-let currentQuestion = 0;
-//ea click on next btn --> cQ++
 
+let currentQuestion = 0;
+
+//quiz q + a object
 const quizA = [
   {question: "A 44 year old man from Texas rushes to the ED for blood in his urine. During examination, it is revealed that the man has crescentic glomerulonephritis, mucosal ulcerations throughout the respiratory tract, rashes, and sinusitis. After lab testing, it is determined that the pathogenesis of all of these sxs are due to PR3-ANCA mediation. Which of the following sxs should also be present in this mans case?",
   choices: ["Asthma", "GI Bleeding", "Hemoptysis", "Palpable purpura", "Muscle pain / weakness"],
@@ -57,22 +32,21 @@ const quizA = [
 
 let initialsList = [];
 let highScoreList = [];
-//create a global variable to allow for clearIntervals to be accessed anywhere
 let timeInterval;
 //max time allowed for the quiz
-var timeLeft = 288;
-// highScoreAEl.addEventListener('click', showScores)
+let timeLeft = 100;
 
 //when page loads for first time or when you click the home anchor in the header; run this fxn to display our home screen
 
-var createCard = () => {
-  var cardDiv = document.createElement('div');
+//create container for entire text to be rendered into. Styling too
+const createCard = () => {
+  const cardDiv = document.createElement('div');
   cardDiv.setAttribute('class', 'card')
   mainEl.appendChild(cardDiv);
 }
 
 const showTitle = (titleContent) => {
-  var title = document.createElement('h1');
+  const title = document.createElement('h1');
   title.textContent = titleContent;
   title.classList.add('home-title');
   let card = document.querySelector('.card');
@@ -80,7 +54,7 @@ const showTitle = (titleContent) => {
 };
 
 const showSubTitle = (subTitleContent) => {
-  var subTitle = document.createElement('h2');
+  const subTitle = document.createElement('h2');
   subTitle.textContent = subTitleContent;
   subTitle.classList.add('sub-title');
   let card = document.querySelector('.card');
@@ -88,7 +62,7 @@ const showSubTitle = (subTitleContent) => {
 };
 
 const showP = (paraContent) => {
-  var pContent = document.createElement('p');
+  const pContent = document.createElement('p');
   pContent.textContent = paraContent;
   pContent.classList.add('home-para');
   let card = document.querySelector('.card');
@@ -96,7 +70,7 @@ const showP = (paraContent) => {
 };
 
 const startBtn = () => {
-  var btnStart = document.createElement('button');
+  const btnStart = document.createElement('button');
   btnStart.textContent = 'Start Quiz!';
   btnStart.setAttribute('id', 'home-start-btn');
   let card = document.querySelector('.card');
@@ -105,6 +79,7 @@ const startBtn = () => {
 
 };
 
+//render in the home page to welcome use and show rules; how scoring works
 const homepage = () => {
 
   mainEl.textContent = '';
@@ -124,9 +99,44 @@ const homepage = () => {
 
 };
 
-//function for timer; MISSING: deduct time if you get question wrong.
-//highScoreList var = []
-var timer = () => {
+//blanks the timerEl text on screen; resets the timer to its original value so that the timer can start again at the top when user initiates a new quiz.
+const resetTimer = () => {
+  timerEl.textContent = '';
+  clearInterval(timeInterval);
+  timeLeft = 100;
+  homepage();
+};
+
+//create button that will take user back to homepage
+const resetBtn = (btntext) => {
+  var resetBtn = document.createElement('button');
+  resetBtn.textContent = btntext;
+  resetBtn.setAttribute('class', 'reset');
+  let card = document.querySelector('.card');
+  card.appendChild(resetBtn);
+  resetBtn.addEventListener('click', resetTimer);
+};
+
+//when timer hits 0 => Game Over screen
+const gameOver = () => {
+  mainEl.innerHTML = '';
+  
+  createCard();
+
+  showTitle('GAME OVER');
+
+  showSubTitle('You ran out of time!');
+
+  showP('Better luck next time!');
+
+  showP('Hit the reset button to try again or take a look at High Scores.');
+
+  resetBtn('Reset Quiz');
+
+};
+
+//function for timer. Allows for time to be saved as score when user solves the final question. Clears the timer if timer hits 0. will show game over screen
+const timer = () => {
 
 timeInterval = setInterval(function (){
     timeLeft--;
@@ -154,20 +164,19 @@ return;
 
 
 
-//on start button generate first answer. have timer start.
-//main -> label -> input x4 choices (answer choices) -> button to move to next question
-var startQuiz = () => {
-  mainEl.textContent = '';
+//on start button clear the <main> inner content. have timer start. indicate which question they're on with currentQuestion
+const startQuiz = () => {
+  mainEl.innerHTML = '';
   currentQuestion = 0;
   timer();
   createCard();
   inQuiz();
 };
 
-var inQuiz = () => {
+//clear main of children; generate container; place question and answer choices within the container
+const inQuiz = () => {
   mainEl.innerHTML = '';
   createCard();
-
   questionLabel();
   answerChoiceBtn();
 }
@@ -176,8 +185,7 @@ var inQuiz = () => {
 
 
 //create question to be answered as a label.
-
-var questionLabel = () => {
+const questionLabel = () => {
   var questionL = document.createElement('label'); //
   questionL.textContent = quizA[currentQuestion].question;
   questionL.classList.add('question-label');
@@ -186,7 +194,7 @@ var questionLabel = () => {
 };
 
 //creating buttons for the user to pick. 
-var answerChoiceBtn = () => {
+const answerChoiceBtn = () => {
   for (let i = 0; i < quizA[currentQuestion].choices.length; i++) {
     var answerBtn = document.createElement('button');
     answerBtn.textContent = quizA[currentQuestion].choices[i];
@@ -198,24 +206,34 @@ var answerChoiceBtn = () => {
 };
 
 // If there was a previous wrong answer and they pick another wrong answer, will remove the last wrongMsg p and insert a new one. 
-var wrongMsg = () => {
-  var removeWrongMsg = document.querySelector('p');
-  if (removeWrongMsg == 'p'){
+const wrongMsg = () => {
+  let removeWrongMsg = document.querySelector('p');
+  if (removeWrongMsg.matches('p')) {
     removeWrongMsg.remove();
-  };
-
   //lets user know they picked wrong answer.
-  var wrongAnswer = document.createElement('p');
+  let wrongAnswer = document.createElement('p');
   wrongAnswer.textContent = 'Sorry. That was incorrect. Try Again!';
   wrongAnswer.setAttribute('class', 'wrong-p');
   let card = document.querySelector('.card');
   card.appendChild(wrongAnswer);
+
+  };
 }
 
-const quizEndCheck = (currentQuestion + 1);
+//increase currentQuestion counter and call inQUiz to display the next question and answer set
+const goNextQ = () => {
+  currentQuestion++;
+  if (currentQuestion === quizA.length) {
+    createCard();
+    endQuiz();
+  } else {
+    createCard();
+    inQuiz();
+};
+}
 
 //checks answer choice of user. If correct, go to next q; if wrong, cross answer choice out and display wrong message. if user has time left, and finished the last question => run end of quiz screen.
-var checkAnswer = (event) => {
+const checkAnswer = (event) => {
   let answerCheck = event.target.textContent;
   let realAnswer = quizA[currentQuestion].answer;
 if (answerCheck !== realAnswer) {
@@ -228,57 +246,8 @@ if (answerCheck !== realAnswer) {
 };
 
 
-//increase currentQuestion counter and call inQUiz to display the next question and answer set
-var goNextQ = () => {
-  currentQuestion++;
-  if (currentQuestion === quizA.length) {
-    createCard();
-    endQuiz();
-  } else {
-    createCard();
-    inQuiz();
-};
-}
-
-//when timer hits 0 => Game Over screen
-var gameOver = () => {
-  mainEl.innerHTML = '';
-  
-  createCard();
-
-  showTitle('GAME OVER');
-
-  showSubTitle('You ran out of time!');
-
-  showP('Better luck next time!');
-
-  showP('Hit the reset button to try again or take a look at High Scores.');
-
-  resetBtn('Reset Quiz');
-
-};
-
-//blanks the timerEl text on screen; resets the timer to its original value so that the timer can start again at the top when user initiates a new quiz.
-const resetTimer = () => {
-  timerEl.textContent = '';
-  clearInterval(timeInterval);
-  timeLeft = 288;
-  homepage();
-};
-
 //end of quiz page that allows for initials and score to be saved. 
-
-
-const resetBtn = (btntext) => {
-  var resetBtn = document.createElement('button');
-  resetBtn.textContent = btntext;
-  resetBtn.setAttribute('class', 'reset');
-  let card = document.querySelector('.card');
-  card.appendChild(resetBtn);
-  resetBtn.addEventListener('click', resetTimer);
-};
-
-var initialsUserInput= () => {
+const initialsUserInput= () => {
   var initials = document.createElement('input');
   initials.setAttribute('type', 'text');
   initials.setAttribute('maxlength', 2);
@@ -287,8 +256,29 @@ var initialsUserInput= () => {
   card.appendChild(initials);
 };
 
+//save highscore to local storage. To be viewed on hitting 
+const saveHighScore = () => {
+  const initialsInput = document.querySelector('#initials');
+  let saveName = initialsInput.value.trim();
+  let storedNames = JSON.parse(localStorage.getItem('name') || '[]');
+  
+  if (saveName !== '' && storedNames !== null) {
+    storedNames.push(saveName);
+    localStorage.setItem('name', JSON.stringify(storedNames));
+    backHomeAfterSave();
+  } else if (saveName !== '' && storedNames == null) {
+    storedNames = initialsList;
+    storedNames.push(saveName);
+    localStorage.setItem('name', JSON.stringify(storedNames));
+    backHomeAfterSave();
+  } else {
+    alert('Please enter your initials. Max 2 characters');
 
-var saveInitialsBtn = () => {
+    endQuiz();
+  };
+};
+
+const saveInitialsBtn = () => {
   var saveIBtn = document.createElement('button');
   saveIBtn.textContent = 'Save';
   saveIBtn.setAttribute('class', 'save-btn');
@@ -309,30 +299,8 @@ const endQuiz = () => {
   saveInitialsBtn();
 }
 
-
-
-var saveHighScore = () => {
-  const initialsInput = document.querySelector('#initials');
-  let saveName = initialsInput.value.trim();
-  let storedNames = JSON.parse(localStorage.getItem('name') || '[]');
-  
-  if (saveName !== '' && storedNames !== null) {
-    storedNames.push(saveName);
-    localStorage.setItem('name', JSON.stringify(storedNames));
-    backHomeAfterSave();
-  } else if (saveName !== '' && storedNames == null) {
-    storedNames = initialsList;
-    storedNames.push(saveName);
-    localStorage.setItem('name', JSON.stringify(storedNames));
-    backHomeAfterSave();
-  } else {
-    alert('Please enter your initials');
-
-    endQuiz();
-  };
-};
-
-var highScoreBtn = () => {
+//functions needed to generate highscore button
+const highScoreBtn = () => {
   var hsBtn = document.createElement('button');
   hsBtn.textContent = 'High Scores';
   let card = document.querySelector('.card');
@@ -340,7 +308,8 @@ var highScoreBtn = () => {
   hsBtn.addEventListener('click', showHighScore)
 }
 
-var backHomeAfterSave = () => {
+//function to show user message after they have saved their initials
+const backHomeAfterSave = () => {
   mainEl.innerHTML = '';
   createCard();
   showTitle('Your score has been saved.');
@@ -351,8 +320,8 @@ var backHomeAfterSave = () => {
   resetBtn('Home');
 }
 
-
-var showHighScore = () => {
+//function to show the highscore list, by clicking the high score anchor or button
+const showHighScore = () => {
   clearInterval(timeInterval);
   mainEl.innerHTML = '';
   createCard();
@@ -363,16 +332,15 @@ var showHighScore = () => {
   card.appendChild(ul);
   retrieveSaved();
   resetBtn('Home');
-
 }
 
-var retrieveSaved = () => {
+const retrieveSaved = () => {
   let getNames = JSON.parse(localStorage.getItem('name'));
   let getScores = JSON.parse(localStorage.getItem('highScore'));
 
 
   for (let i = 0; i < getNames.length; i++) {
-    var li = document.createElement('li');
+    const li = document.createElement('li');
     li.textContent = getNames[i] + ' - ' + getScores[i];
     let addUl = document.querySelector('#score-list');
     addUl.appendChild(li);
@@ -387,32 +355,5 @@ var retrieveSaved = () => {
 
 //if you click the home anchor; will stop the timer, reset it, and take the user back to the homepage
 homeAEl.addEventListener('click', resetTimer);
+//click highscore anchor, will stop timer, reset it and 
 highScoreAEl.addEventListener('click', showHighScore);
-
-
-
-// var quizBtn = () => {
-//   var quizBtn = document.createElement('button');
-//   quizBtn.textContent = 'Skip Question';
-//   mainEl.appendChild(quizBtn);
-//   quizBtn.addEventListener('click', goNextQ);
-// };
-// var previousBtn = () => {
-//   var previousBtn = document.createElement('button');
-//   previousBtn.textContent = 'Previous Question';
-//   mainEl.appendChild(previousBtn);
-//   previousBtn.addEventListener('click', backQ)
-// }
-
-// var backQ = () => {
-//   currentQuestion--;
-//   inQuiz();
-// }
-
-
-// var lastQBtn = () => {
-//   var lastQBtn = document.createElement('button');
-//   lastQBtn.textContent =  'Finish Quiz';
-//   mainEl.appendChild(lastQBtn);
-//   //add an event listener to fun end page function on click
-// };

@@ -5,7 +5,6 @@
 
 body {
   height: 100vh;
-
   background-color: var(--white);
 
   display: flex;
@@ -22,18 +21,20 @@ header {
   background-color: var(--primary-color);
   padding: 20px;
   color: white;
+  flex-wrap: wrap;
 }
 
 
-header > div {
+header > div,
+nav {
   width: calc(100% / 3);
 }
 
 nav ul {
   display: flex;
-  display: flex;
-  gap: 10px;
-  font-size: 1.5rem
+  font-size: 1.5rem;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 
@@ -57,12 +58,13 @@ a {
 .header-middle {
   display: flex;
   justify-content: center;
+  
 }
 
 .header-right {
   font-size: 1.5rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 
@@ -80,14 +82,19 @@ h1,
 label {
   font-size: 2rem;
   line-height: 2.5rem;
-  font-weight: bolder;
   text-align: center;
 }
+
+h1 {
+  font-weight: bolder;
+}
+
 h2 {
   font-size: 1.75rem;
   line-height: 1.5rem;
   font-weight: bold;
 }
+
 .home-para,
 .wrong-p,
 #score-list {
@@ -134,4 +141,43 @@ footer {
 
 footer h3 {
   font-size: 1.2rem;
+}
+
+@media (max-width: 375px) {
+  header {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  header > div {
+    width: 100%;
+  }
+  nav {
+    text-align: center;
+  }
+
+  .header-middle {
+    order: -1
+  }
+  .header-right {
+    justify-content: center;
+  }
+  label {
+    font-size: 1.1rem;
+    line-height: 1.25rem;
+  }
+  #home-start-btn,
+  .save-btn,
+  .reset,
+  .answer-choices,
+  .hs-btn,
+  button {
+    font-size: 1rem;
+  }
+  .home-para,
+.wrong-p,
+#score-list {
+  font-size: 1.1rem;
+}
 }
